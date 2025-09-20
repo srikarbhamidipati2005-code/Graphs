@@ -20,6 +20,9 @@ void kahn(){
 		topo.push_back(cur);
 		for(auto v:g[cur]){
 			indeg[v]--;
+			if(indeg[v]==0){
+				q.push(v);
+			}
 		}
 	}
 }
