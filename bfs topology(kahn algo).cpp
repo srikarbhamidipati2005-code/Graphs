@@ -1,49 +1,54 @@
+// Write your code here
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> g;
-vector<int> indegree;
+#define ll int64_t
+#define endl '\n'
 
-void kahnTopologicalSort(int vertices) {
-    queue<int> q;
 
-    for (int i = 0; i < vertices; ++i) {
-        if (indegree[i] == 0) {
-            q.push(i);
-        }
-    }
-
-    while (!q.empty()) {
-        int current = q.front();
-        q.pop();
-
-        cout << current << " ";
-
-        for (int neighbor : g[current]) {
-            indegree[neighbor]--;
-            if (indegree[neighbor] == 0) {
-                q.push(neighbor);
-            }
-        }
-    }
+void solve() {
+	int n, m;
+	cin >> n >> m;
+	vector<int> adj[n + 1], in_deg(n + 1, 0), ans;
+	for (int i = 0; i < m; i++) {
+		int u, v;
+		cin >> u >> v;
+		adj[u].push_back(v);
+		in_deg[v]++;
+	}
+	priority_queue < int , vector<int>, greater<int>> pq;
+	for (int i = 1; i <= n; i++)if (in_deg[i] == 0)pq.push(i);
+	while (!pq.empty()) {
+		int v = pq.top();
+		pq.pop();
+		ans.push_back(v);
+		for (auto x : adj[v]) {
+			in_deg[x]--;
+			if (in_deg[x] == 0)pq.push(x);
+		}
+	}
+	if (ans.size() != n) {
+		cout << -1 << endl;
+		return;
+	}
+	for (auto x : ans)cout << x << " ";
 }
-
 int main() {
-    int n, m;
-    cin >> n >> m;
+	ios_base :: sync_with_stdio(0);
+	cin.tie(nullptr); cout.tie(nullptr);
 
-    g.resize(n);
-    indegree.assign(n, 0);
-
-    for (int i = 0; i < m; ++i) {
-        int l, r;
-        cin >> l >> r;
-        g[l].push_back(r);
-        indegree[r]++;
-    }
-
-    cout << "Topological Sorting Order: ";
-    kahnTopologicalSort(n);
-
-    return 0;
+#ifdef Mastermind_
+	freopen("input.txt", "r", stdin); \
+	freopen("output.txt", "w", stdout);
+#endif
+	int t = 1;
+	// int i = 1;
+	// cin >> t;
+	while (t--) {
+		// cout << "Case #" << i << ": ";
+		solve();
+		// i++;
+	}
+	return 0;
 }
+
